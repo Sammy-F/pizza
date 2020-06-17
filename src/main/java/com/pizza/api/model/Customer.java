@@ -23,31 +23,32 @@ public class Customer {
     // Columns
 
     @Id
-    @Column(name = "customer_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter @Setter private Long customerId;
+    @Getter @Setter private Long id;
 
     @Column(name = "first_name", nullable = false) @Getter @Setter private String firstName;
     @Column(name = "last_name", nullable = false) @Getter @Setter private String lastName;
     @Column(name = "phone_number", nullable = false) @Getter @Setter private String phoneNumber;
     @Column(name = "email", nullable = false) @Getter @Setter private String email;
+    @Column(name = "password", nullable = false) @Getter @Setter private String password;
 
     @Column(name = "created_at", nullable = false) @CreatedDate @Getter @Setter private Date createdAt;
     @Column(name = "created_by", nullable =  false) @CreatedBy private String createdBy;
     @Column(name = "last_modified_date", nullable = false) @LastModifiedDate private Date lastModifiedDate;
     @Column(name = "last_modified_by", nullable = false) @LastModifiedBy private String lastModifiedBy;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Address.class)
     @JoinColumn(name = "customer_id")
-    private List<Address> addresses = new ArrayList<>();
+    @Getter @Setter
+    private List<Address> addresses;
 
     // Constructors
 
-    public Customer(Long customerId, String firstName, String lastName, String phoneNumber, String email, 
-                    Date createdAt, String createdBy, Date lastModifiedDate, String lastModifiedBy) {
+    public Customer(Long id, String firstName, String lastName, String phoneNumber, String email, String password,
+                    Date createdAt, String createdBy, Date lastModifiedDate, String lastModifiedBy, List<Address> addresses) {
         
             super();
-            this.customerId = customerId;
+            this.id = id;
             this.firstName = firstName;
             this.lastName = lastName;
             this.phoneNumber = phoneNumber;
@@ -56,6 +57,7 @@ public class Customer {
             this.createdBy = createdBy;
             this.lastModifiedDate = lastModifiedDate;
             this.lastModifiedBy = lastModifiedBy;
+            this.addresses = addresses;
         }
 
     public Customer() {
@@ -63,13 +65,19 @@ public class Customer {
     }
 
     public void addAddress(Address address) {
+        if (this.addresses == null) {
+            this.addresses = new ArrayList<>();
+        }
         addresses.add(address);
         address.setCustomer(this);
     }
 
     public void removeAddress(Address address) {
         addresses.remove(address);
-        address.setCustomer(null);
+    }
+
+    public void removeAllAddresses() {
+        addresses.clear();
     }
     
 }
