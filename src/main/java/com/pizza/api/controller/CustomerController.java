@@ -59,13 +59,12 @@ public class CustomerController {
      * @return the new customer
      */
     @PostMapping("/customers")
-    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
-        final Customer savedCustomer = customerRepository.save(customer);
-        return ResponseEntity.ok(savedCustomer);
+    public Customer createCustomer(@Valid @RequestBody Customer customer) {
+        return customerRepository.save(customer);
     }
 
     /**
-     * Update an existing customer
+     * Update an existing customer. Note, does NOT update password.
      * @param customerId  the id of the original customer
      * @param newCustomerDetails the details of the updated customer
      * @return the updated customer

@@ -31,6 +31,21 @@ public class AddressController {
     @Autowired
     AddressRepository addressRepository;
 
+    /**
+     * Get all addresses
+     * @return
+     */
+    @GetMapping("/addresses")
+    public List<Address> getAddresses() {
+        return addressRepository.findAll();
+    }
+    
+    /**
+     * Gets all addresses of a given customer
+     * @param customerId
+     * @return
+     * @throws ResourceNotFoundException
+     */
     @GetMapping("/customers/{customer_id}/addresses")
     public List<Address> getCustomerAddresses(@PathVariable(value="customer_id") Long customerId)
             throws ResourceNotFoundException {

@@ -2,6 +2,8 @@ package com.pizza.api.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity(name = "Address")
 @Table(name="address")
-@EntityListeners(AuditingEntityListener.class)
-public class Address {
+// @EntityListeners(AuditingEntityListener.class)
+public class Address extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +25,7 @@ public class Address {
     @Column(name="state", length=2, nullable = false) @Getter @Setter private String state;
     @Column(name="zipcode", nullable = false) @Getter @Setter private String zipcode;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     @Getter @Setter
