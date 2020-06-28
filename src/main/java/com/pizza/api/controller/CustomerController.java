@@ -52,6 +52,11 @@ public class CustomerController {
             .orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + customerId));
         return ResponseEntity.ok().body(customer);
     }
+
+    @GetMapping("/customers/zipcode/{zipcode}")
+    public List<Customer> getCustomersByZipcode(@PathVariable(value = "zipcode") String zipcode) {
+        return customerRepository.findByZipcode(zipcode);
+    }
     
     /**
      * Create a new customer
